@@ -8,11 +8,12 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private float _percentForSecond;
-    [SerializeField] private Text _currentHealth;
-    [SerializeField] private Text _maxHealth;
+    [SerializeField] private Text _currentHealthText;
+    [SerializeField] private Text _maxHealthText;
 
     private float _target;
     private Slider _bar;
+    private Coroutine _currentCoroutine;
 
     private void Start()
     {
@@ -21,9 +22,8 @@ public class HealthBar : MonoBehaviour
         _bar = GetComponent<Slider>();
         _bar.value = _player.Health / _player.MaxHealth;
         _target = _bar.value;
-        _maxHealth.text = _player.MaxHealth.ToString();
-        _currentHealth.text = _player.Health.ToString();
-        StartCoroutine(ChangeSmooth());
+        _maxHealthText.text = _player.MaxHealth.ToString();
+        _currentHealthText.text = _player.Health.ToString();
     }
 
     private void OnDisable()
@@ -34,17 +34,21 @@ public class HealthBar : MonoBehaviour
 
     private void ChangeTextValue()
     {
-        _currentHealth.text = _player.Health.ToString();
+        _currentHealthText.text = _player.Health.ToString();
     }
 
     private void ChangeSliderValue()
     {
+        if (_currentCoroutine != null)
+            StopCoroutine(_currentCoroutine);
+
         _target = _player.Health / _player.MaxHealth;
+        _currentCoroutine = StartCoroutine(ChangeSmooth());
     }
 
     private IEnumerator ChangeSmooth()
     {
-        while (true)
+        while (_bar.value != _target)
         {
             _bar.value = Mathf.MoveTowards(_bar.value, _target, (_percentForSecond / 100) * Time.deltaTime);
 

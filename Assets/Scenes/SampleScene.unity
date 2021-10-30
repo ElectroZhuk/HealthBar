@@ -384,8 +384,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 2107358989}
   _percentForSecond: 35
-  _currentHealth: {fileID: 754165428}
-  _maxHealth: {fileID: 1328969531}
+  _currentHealthText: {fileID: 754165428}
+  _maxHealthText: {fileID: 1328969531}
 --- !u!1 &581270850
 GameObject:
   m_ObjectHideFlags: 0
