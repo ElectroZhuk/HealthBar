@@ -6,9 +6,8 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float _maxHealth;
-    public UnityAction OnHealthChanged;
-    public UnityAction OnHealed;
-    public UnityAction OnHitted;
+
+    private float _health;
 
     public float Health
     {
@@ -18,17 +17,15 @@ public class Player : MonoBehaviour
         }
         private set
         {
-            if (value < 0)
-                _health = 0;
-            else if (value > _maxHealth)
-                _health = _maxHealth;
-            else
-                _health = value;
+            _health = Mathf.Clamp(value, 0, _maxHealth);
         }
     }
     public float MaxHealth => _maxHealth;
+    public UnityAction HealthChanged;
+    public UnityAction Healed;
+    public UnityAction Hitted;
 
-    private float _health;
+
 
     private void Awake()
     {
@@ -42,8 +39,8 @@ public class Player : MonoBehaviour
 
         if (tempHealth != Health)
         {
-            OnHealthChanged.Invoke();
-            OnHitted.Invoke();
+            HealthChanged?.Invoke();
+            Hitted?.Invoke();
         }
     }
 
@@ -54,8 +51,8 @@ public class Player : MonoBehaviour
 
         if (tempHealth != Health)
         {
-            OnHealthChanged.Invoke();
-            OnHealed.Invoke();
+            HealthChanged?.Invoke();
+            Healed?.Invoke();
         }
     }
 }

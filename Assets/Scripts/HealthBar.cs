@@ -15,10 +15,8 @@ public class HealthBar : MonoBehaviour
     private Slider _bar;
     private Coroutine _currentCoroutine;
 
-    private void Start()
+    private void Awake()
     {
-        _player.OnHealthChanged += ChangeSliderValue;
-        _player.OnHealthChanged += ChangeTextValue;
         _bar = GetComponent<Slider>();
         _bar.value = _player.Health / _player.MaxHealth;
         _target = _bar.value;
@@ -26,10 +24,16 @@ public class HealthBar : MonoBehaviour
         _currentHealthText.text = _player.Health.ToString();
     }
 
+    private void OnEnable()
+    {
+        _player.HealthChanged += ChangeSliderValue;
+        _player.HealthChanged += ChangeTextValue;
+    }
+
     private void OnDisable()
     {
-        _player.OnHealthChanged -= ChangeSliderValue;
-        _player.OnHealthChanged -= ChangeTextValue;
+        _player.HealthChanged -= ChangeSliderValue;
+        _player.HealthChanged -= ChangeTextValue;
     }
 
     private void ChangeTextValue()

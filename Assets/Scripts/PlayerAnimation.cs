@@ -9,20 +9,25 @@ public class PlayerAnimation : MonoBehaviour
     private Player _player;
     private Animator _animator;
 
-    private void Start()
+    private void Awake()
     {
         _player = GetComponent<Player>();
         _animator = GetComponent<Animator>();
-        _player.OnHitted += EnableHitTrigger;
-        _player.OnHealed += EnableHealTrigger;
-        ChangeHealthValue();
-        _player.OnHealthChanged += ChangeHealthValue;
     }
+
+    private void OnEnable()
+    {
+        _player.Hitted += EnableHitTrigger;
+        _player.Healed += EnableHealTrigger;
+        ChangeHealthValue();
+        _player.HealthChanged += ChangeHealthValue;
+    }
+
     private void OnDisable()
     {
-        _player.OnHitted -= EnableHitTrigger;
-        _player.OnHealed -= EnableHealTrigger;
-        _player.OnHealthChanged -= ChangeHealthValue;
+        _player.Hitted -= EnableHitTrigger;
+        _player.Healed -= EnableHealTrigger;
+        _player.HealthChanged -= ChangeHealthValue;
     }
 
     private void ChangeHealthValue()
